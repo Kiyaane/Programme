@@ -1,209 +1,659 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#31483e">
 <title>Escapade — notre voyage</title>
+
 <style>
-:root{--site-primary:#31483e;--site-on-primary:#fff;--site-secondary:#e8e4d9;--site-on-secondary:#31483e;--site-background:#f6f4ef;--site-on-background:#252b27;--site-font-body:Inter,system-ui,-apple-system,sans-serif;--site-font-heading:Georgia,serif;--site-heading-scale:1;--site-spacing-scale:1;--site-radius-scale:1;--site-decoration-opacity:1;color-scheme:light dark}
+:root{
+  --green:#31483e;
+  --green-light:#e8e4d9;
+  --background:#f6f4ef;
+  --text:#252b27;
+  --muted:#788078;
+  --white:#fff;
+  --border:#e8e5dd;
+}
+
 *{box-sizing:border-box}
-body{margin:0;font-family:var(--site-font-body);background:var(--site-background);color:var(--site-on-background)}
-.app{min-height:100vh;background:light-dark(var(--site-background),#171d19);color:light-dark(var(--site-on-background),#f1f2ed);padding-bottom:85px}
-.hero{background:var(--site-primary);color:white;padding:25px 20px 24px}
-.brand{font-size:11px;letter-spacing:.18em;opacity:.8;font-weight:700}
-.hero h1{font:400 calc(36px * var(--site-heading-scale))/1.08 var(--site-font-heading);margin:24px 0 8px}
-.hero p{font-size:13px;color:#d5ded7;margin:0}
-.pills{display:flex;gap:7px;margin-top:18px}
-.pill{border:1px solid #ffffff55;border-radius:30px;padding:6px 10px;font-size:11px}
-main{max-width:680px;margin:auto;padding:20px 15px}
-.overview{display:flex;align-items:end;justify-content:space-between;margin:3px 2px 17px;gap:10px}
-.overview h2{font:400 25px var(--site-font-heading);margin:0}
-.overview p{font-size:12px;color:light-dark(#788078,#aab3aa);margin:5px 0 0}
-.total{background:var(--site-secondary);color:var(--site-on-secondary);padding:9px 12px;border-radius:14px;text-align:right;min-width:100px}
-.total small{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.1em}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,sans-serif;
+  background:var(--background);
+  color:var(--text);
+}
+
+button,input,textarea,select{font:inherit}
+
+.app{
+  min-height:100vh;
+  padding-bottom:85px;
+}
+
+.hero{
+  background:var(--green);
+  color:white;
+  padding:25px 20px 24px;
+}
+
+.brand{
+  font-size:11px;
+  letter-spacing:.12em;
+  opacity:.8;
+  font-weight:700;
+}
+
+.hero h1{
+  font-size:30px;
+  margin:20px 0 8px;
+  font-weight:750;
+}
+
+.hero p{
+  font-size:13px;
+  color:#d5ded7;
+  margin:0;
+}
+
+.pills{
+  display:flex;
+  gap:7px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+
+.pill{
+  border:1px solid #ffffff55;
+  border-radius:30px;
+  padding:6px 10px;
+  font-size:11px;
+}
+
+main{
+  max-width:680px;
+  margin:auto;
+  padding:20px 15px;
+}
+
+.overview{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  margin:3px 2px 17px;
+  gap:10px;
+}
+
+.overview h2{
+  font:400 25px Georgia,serif;
+  margin:0;
+}
+
+.overview p{
+  font-size:12px;
+  color:var(--muted);
+  margin:5px 0 0;
+}
+
+.total{
+  background:var(--green-light);
+  color:var(--green);
+  padding:9px 12px;
+  border-radius:14px;
+  text-align:right;
+  min-width:100px;
+}
+
+.total small{
+  display:block;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
 .total b{font-size:19px}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:16px}
-.tab{background:light-dark(#fff,#242c26);color:inherit;border:1px solid light-dark(#e6e3db,#3a443c);border-radius:11px;padding:10px 3px;font:600 12px var(--site-font-body)}
-.tab.active{background:var(--site-primary);color:white;border-color:var(--site-primary)}
+
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-bottom:16px;
+}
+
+.tab{
+  background:white;
+  color:inherit;
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:10px 3px;
+  font-size:12px;
+  font-weight:600;
+}
+
+.tab.active{
+  background:var(--green);
+  color:white;
+  border-color:var(--green);
+}
+
 .panel{display:none}
 .panel.active{display:block}
-.heading{display:flex;justify-content:space-between;align-items:center;margin:6px 2px 12px}
-.heading h3{font:400 23px var(--site-font-heading);margin:0}
-.heading span{font-size:11px;color:light-dark(#818980,#aab3aa)}
-.card,.item{background:light-dark(#fff,#232b25);border:1px solid light-dark(#e8e5dd,#39433c);border-radius:17px;padding:15px;margin-bottom:11px}
-.cardhead{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.ico{width:35px;height:35px;display:grid;place-items:center;border-radius:11px;background:var(--site-secondary);color:var(--site-on-secondary);font-size:17px}
-.cardhead b{display:block;font-size:14px}
-.cardhead small{display:block;font-size:11px;color:light-dark(#818980,#aab3aa);margin-top:2px}
+
+.heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:6px 2px 12px;
+}
+
+.heading h3{
+  font:400 23px Georgia,serif;
+  margin:0;
+}
+
+.heading span{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.card,.item{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:15px;
+  margin-bottom:11px;
+}
+
+.cardhead{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.ico{
+  width:35px;
+  height:35px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  background:var(--green-light);
+  color:var(--green);
+  font-size:17px;
+}
+
+.cardhead b{
+  display:block;
+  font-size:14px;
+}
+
+.cardhead small{
+  display:block;
+  font-size:11px;
+  color:var(--muted);
+  margin-top:2px;
+}
+
 .field{margin-bottom:10px}
 .field:last-child{margin-bottom:0}
-label{display:block;font-size:11px;font-weight:650;color:light-dark(#69736b,#b1bbb1);margin:0 0 5px 2px}
-input,textarea,select{width:100%;padding:11px 12px;border:1px solid light-dark(#e2e2da,#465047);border-radius:10px;background:light-dark(#fbfaf7,#1b221d);color:inherit;font:14px var(--site-font-body);outline:none}
-textarea{min-height:76px;resize:vertical}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.money{position:relative}
-.money:after{content:'€';position:absolute;right:12px;top:11px;color:#879087}
-.money input{padding-right:30px}
-.btn{border:0;border-radius:10px;padding:11px 14px;background:var(--site-primary);color:white;font:600 12px var(--site-font-body)}
-.btn.light{background:var(--site-secondary);color:var(--site-on-secondary)}
-.actions{display:flex;justify-content:flex-end;margin-top:12px}
+
+label{
+  display:block;
+  font-size:11px;
+  font-weight:650;
+  color:#69736b;
+  margin:0 0 5px 2px;
+}
+
+input,textarea,select{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid #e2e2da;
+  border-radius:10px;
+  background:#fbfaf7;
+  color:var(--text);
+  font-size:14px;
+  outline:none;
+}
+
+textarea{
+  min-height:76px;
+  resize:vertical;
+}
+
+input:focus,textarea:focus,select:focus{
+  border-color:var(--green);
+}
+
+.two{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:11px 14px;
+  background:var(--green);
+  color:white;
+  font-size:12px;
+  font-weight:600;
+}
+
+.actions{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:12px;
+}
+
 .item{padding:13px}
-.itemtop{display:flex;justify-content:space-between;gap:8px}
+
+.itemtop{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+}
+
 .item b{font-size:13px}
-.item p{font-size:12px;line-height:1.5;color:light-dark(#727b73,#b0b9b0);white-space:pre-wrap;margin:6px 0 0}
-.price{font-weight:700;font-size:12px;white-space:nowrap}
-.item a{font-size:12px;color:light-dark(#426b57,#a7c7b2)}
-.delete{border:0;background:none;color:#b47769;font-size:11px;padding:7px 0 0}
-.empty{text-align:center;color:#929a91;padding:17px;font-size:12px}
-.note{font-size:10px;color:light-dark(#858d85,#aab3aa);line-height:1.5;margin:14px 3px}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:light-dark(#f6f4eff2,#171d19f2);backdrop-filter:blur(12px);border-top:1px solid light-dark(#e5e2d9,#39423b);padding:9px 8px max(10px,env(safe-area-inset-bottom));display:flex;justify-content:space-around}
-.bottom button{border:0;background:none;color:light-dark(#788078,#aab3aa);font:600 10px var(--site-font-body);display:grid;gap:3px;justify-items:center}
+
+.item p{
+  font-size:12px;
+  line-height:1.5;
+  color:#727b73;
+  white-space:pre-wrap;
+  margin:6px 0 0;
+}
+
+.price{
+  font-weight:700;
+  font-size:12px;
+  white-space:nowrap;
+}
+
+.item a{
+  font-size:12px;
+  color:#426b57;
+}
+
+.delete{
+  border:0;
+  background:none;
+  color:#b47769;
+  font-size:11px;
+  padding:7px 0 0;
+}
+
+.empty{
+  text-align:center;
+  color:#929a91;
+  padding:17px;
+  font-size:12px;
+}
+
+.note{
+  font-size:10px;
+  color:#858d85;
+  line-height:1.5;
+  margin:14px 3px;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#f6f4eff2;
+  backdrop-filter:blur(12px);
+  border-top:1px solid var(--border);
+  padding:9px 8px max(10px,env(safe-area-inset-bottom));
+  display:flex;
+  justify-content:space-around;
+}
+
+.bottom button{
+  border:0;
+  background:none;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:600;
+  display:grid;
+  gap:3px;
+  justify-items:center;
+}
+
 .bottom button span:first-child{font-size:18px}
-.bottom button.active{color:var(--site-primary)}
-@media(min-width:650px){.hero{padding-left:max(22px,calc((100% - 640px)/2))}.tabs{grid-template-columns:repeat(6,1fr)}}
+.bottom button.active{color:var(--green)}
+
+@media(min-width:650px){
+  .hero{padding-left:max(22px,calc((100% - 640px)/2))}
+  .tabs{grid-template-columns:repeat(6,1fr)}
+}
 </style>
 </head>
+
 <body>
 <div class="app">
+
 <header class="hero">
-<div class="brand">ESCAPADE · NOTRE CARNET À DEUX</div>
-<h1>On part<br>à l'aventure.</h1>
-<p>Toutes nos infos de voyage au même endroit.</p>
-<div class="pills">
-<span class="pill">✈ Destination à définir</span>
-<span class="pill">♡ À deux</span>
-</div>
-</header>
-<main>
-<div class="overview">
-<div>
-<h2>Notre voyage</h2>
-<p>On prépare tout ensemble.</p>
-</div>
-<div class="total">
-<small>Budget enregistré</small>
-<b id="total">0 €</b>
-</div>
-</div>
-<nav class="tabs">
-<button class="tab active" data-tab="vol">✈ Vol</button>
-<button class="tab" data-tab="hotel">⌂ Hôtel</button>
-<button class="tab" data-tab="transfert">⇢ Transfert</button>
-<button class="tab" data-tab="activites">⌖ Activités</button>
-<button class="tab" data-tab="food">♡ Nourriture</button>
-<button class="tab" data-tab="idees">✎ Idées</button>
-</nav>
-<section class="panel active" id="vol">
-  <div class="heading"><h3>Nos vols</h3><span>Aller & retour</span></div>
-  <div class="card">
-    <div class="cardhead"><div class="ico">✈</div><div><b>Billets d'avion</b><small>Compagnie, horaires et réservation</small></div></div>
-    <div class="two">
-      <div class="field"><label>Compagnie</label><input id="compagnie" placeholder="Ex. Brussels Airlines"></div>
-      <div class="field"><label>Prix total (€)</label><input id="volprix" type="number" min="0" placeholder="0"></div>
-    </div>
-    <div class="two">
-      <div class="field"><label>Vol aller</label><input id="aller" placeholder="Date · heure"></div>
-      <div class="field"><label>Vol retour</label><input id="retour" placeholder="Date · heure"></div>
-    </div>
-    <div class="field"><label>Aéroport de départ → arrivée</label><input id="aeroports" placeholder="Ex. Lyon → Bruxelles"></div>
-    <div class="field"><label>Lien de réservation</label><input id="vollien" placeholder="https://…"></div>
-    <div class="field"><label>Notes</label><textarea id="volnotes"></textarea></div>
-    <div class="actions"><button class="btn" onclick="save('vol')">Enregistrer</button></div>
+  <div class="brand">ESCAPADE · NOTRE CARNET À DEUX</div>
+  <h1>Organisons nos vacances</h1>
+  <p>Toutes les informations du voyage au même endroit.</p>
+  <div class="pills">
+    <span class="pill" id="destination-pill">✈ Destination à définir</span>
+    <span class="pill">♡ À deux</span>
   </div>
+</header>
+
+<main>
+
+<div class="overview">
+  <div>
+    <h2>Notre voyage</h2>
+    <p>On prépare tout ensemble.</p>
+  </div>
+  <div class="total">
+    <small>Budget enregistré</small>
+    <b id="total">0 €</b>
+  </div>
+</div>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="vol">✈ Vol</button>
+  <button class="tab" data-tab="hotel">⌂ Hôtel</button>
+  <button class="tab" data-tab="transfert">⇢ Transfert</button>
+  <button class="tab" data-tab="activites">⌖ Activités</button>
+  <button class="tab" data-tab="food">♡ Nourriture</button>
+  <button class="tab" data-tab="idees">✎ Idées</button>
+</nav>
+
+<section class="panel active" id="vol">
+  <div class="heading">
+    <h3>Nos vols</h3>
+    <span>Aller & retour</span>
+  </div>
+
+  <div class="card">
+    <div class="cardhead">
+      <div class="ico">✈</div>
+      <div>
+        <b>Billets d'avion</b>
+        <small>Compagnie, horaires et trajet</small>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Compagnie aérienne</label>
+      <input id="compagnie" placeholder="Ex. Brussels Airlines">
+    </div>
+
+    <div class="two">
+      <div class="field">
+        <label>Vol aller</label>
+        <input id="aller" placeholder="Date · heure">
+      </div>
+      <div class="field">
+        <label>Vol retour</label>
+        <input id="retour" placeholder="Date · heure">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Aéroport de départ → arrivée</label>
+      <input id="aeroports" placeholder="Ex. Lyon → Bruxelles">
+    </div>
+
+    <div class="field">
+      <label>Notes (bagages, terminal…)</label>
+      <textarea id="volnotes"></textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="save('vol')">Enregistrer</button>
+    </div>
+  </div>
+
   <div id="volview"></div>
 </section>
 
 <section class="panel" id="hotel">
-  <div class="heading"><h3>Notre hôtel</h3><span>Où dormir</span></div>
-  <div class="card">
-    <div class="cardhead"><div class="ico">⌂</div><div><b>Hébergement</b><small>Adresse et réservation</small></div></div>
-    <div class="field"><label>Nom de l'hôtel</label><input id="nomhotel" placeholder="Nom de l'établissement"></div>
-    <div class="field"><label>Adresse</label><input id="adressehotel" placeholder="Adresse complète"></div>
-    <div class="two">
-      <div class="field"><label>Arrivée</label><input id="checkin" type="date"></div>
-      <div class="field"><label>Départ</label><input id="checkout" type="date"></div>
-    </div>
-    <div class="two">
-      <div class="field"><label>Nombre de nuits</label><input id="nuits" type="number" min="0"></div>
-      <div class="field"><label>Prix total (€)</label><input id="hotelprix" type="number" min="0"></div>
-    </div>
-    <div class="field"><label>Lien de réservation</label><input id="hotellien" placeholder="https://…"></div>
-    <div class="field"><label>Notes</label><textarea id="hotelnotes"></textarea></div>
-    <div class="actions"><button class="btn" onclick="save('hotel')">Enregistrer</button></div>
+  <div class="heading">
+    <h3>Notre hôtel</h3>
+    <span>Où dormir</span>
   </div>
+
+  <div class="card">
+    <div class="cardhead">
+      <div class="ico">⌂</div>
+      <div>
+        <b>Hébergement</b>
+        <small>Nom et adresse</small>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Nom de l'hôtel</label>
+      <input id="nomhotel" placeholder="Nom de l'établissement">
+    </div>
+
+    <div class="field">
+      <label>Adresse</label>
+      <input id="adressehotel" placeholder="Adresse complète">
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="save('hotel')">Enregistrer</button>
+    </div>
+  </div>
+
   <div id="hotelview"></div>
 </section>
 
 <section class="panel" id="transfert">
-  <div class="heading"><h3>Rejoindre l'hôtel</h3><span>Nos trajets</span></div>
+  <div class="heading">
+    <h3>Rejoindre l'hôtel</h3>
+    <span>Aéroport → hôtel</span>
+  </div>
+
   <div class="card">
-    <div class="cardhead"><div class="ico">⇢</div><div><b>Notre trajet à l'arrivée</b><small>Comment rejoindre notre hôtel ?</small></div></div>
+    <div class="cardhead">
+      <div class="ico">⇢</div>
+      <div>
+        <b>Notre trajet à l'arrivée</b>
+        <small>Comment aller de l'aéroport à l'hôtel ?</small>
+      </div>
+    </div>
+
     <div class="field">
       <label>Moyen de transport</label>
       <select id="moyen">
         <option value="">Choisir…</option>
-        <option>Bus</option><option>Train / RER</option><option>Métro / tram</option>
-        <option>Taxi</option><option>VTC</option><option>Navette</option>
-        <option>À pied</option><option>Autre</option>
+        <option>Bus</option>
+        <option>Train / RER</option>
+        <option>Métro / tram</option>
+        <option>Taxi</option>
+        <option>VTC</option>
+        <option>Navette</option>
+        <option>À pied</option>
+        <option>Autre</option>
       </select>
     </div>
-    <div class="field"><label>Itinéraire détaillé</label><textarea id="trajet"></textarea></div>
-    <div class="two">
-      <div class="field"><label>Durée estimée</label><input id="duree" placeholder="35 min"></div>
-      <div class="field"><label>Prix total (€)</label><input id="transprix" type="number" min="0"></div>
+
+    <div class="field">
+      <label>Itinéraire détaillé</label>
+      <textarea id="trajet" placeholder="Ex. Prendre le bus à l'aéroport, descendre à…"></textarea>
     </div>
-    <div class="field"><label>Lien utile / horaires</label><input id="translien" placeholder="https://…"></div>
-    <div class="actions"><button class="btn" onclick="save('transfert')">Enregistrer</button></div>
+
+    <div class="two">
+      <div class="field">
+        <label>Durée estimée</label>
+        <input id="duree" placeholder="35 min">
+      </div>
+      <div class="field">
+        <label>Prix total (€)</label>
+        <input id="transprix" type="number" min="0" placeholder="0">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Lien utile / horaires</label>
+      <input id="translien" placeholder="https://…">
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="save('transfert')">Enregistrer</button>
+    </div>
   </div>
+
   <div id="transfertview"></div>
 </section>
 
 <section class="panel" id="activites">
-  <div class="heading"><h3>À faire sur place</h3><span>Visites & itinéraires</span></div>
-  <div class="card">
-    <div class="cardhead"><div class="ico">⌖</div><div><b>Ajouter une activité</b><small>Visite, balade, musée, excursion…</small></div></div>
-    <div class="field"><label>Nom de l'activité</label><input id="actnom"></div>
-    <div class="two">
-      <div class="field"><label>Jour / date</label><input id="actjour" placeholder="Jour 1"></div>
-      <div class="field"><label>Prix / personne (€)</label><input id="actprix" type="number" min="0"></div>
-    </div>
-    <div class="field"><label>Adresse / lieu</label><input id="actlieu"></div>
-    <div class="field"><label>Itinéraire / comment y aller</label><textarea id="acttrajet"></textarea></div>
-    <div class="field"><label>Lien / réservation</label><input id="actlien" placeholder="https://…"></div>
-    <div class="actions"><button class="btn" onclick="add('activites')">＋ Ajouter</button></div>
+  <div class="heading">
+    <h3>À faire sur place</h3>
+    <span>Visites & itinéraires</span>
   </div>
+
+  <div class="card">
+    <div class="cardhead">
+      <div class="ico">⌖</div>
+      <div>
+        <b>Ajouter une activité</b>
+        <small>Visite, balade, musée, excursion…</small>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Nom de l'activité</label>
+      <input id="actnom" placeholder="Ex. Visiter le centre historique">
+    </div>
+
+    <div class="two">
+      <div class="field">
+        <label>Jour</label>
+        <select id="actjour">
+          <option value="">Choisir un jour…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Prix / personne (€)</label>
+        <input id="actprix" type="number" min="0" placeholder="0">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Adresse / lieu</label>
+      <input id="actlieu" placeholder="Adresse ou nom du lieu">
+    </div>
+
+    <div class="field">
+      <label>Itinéraire / comment y aller</label>
+      <textarea id="acttrajet" placeholder="Départ, transport, étapes, durée…"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Lien / réservation</label>
+      <input id="actlien" placeholder="https://…">
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="add('activites')">＋ Ajouter</button>
+    </div>
+  </div>
+
   <div id="activiteslist"></div>
 </section>
 
 <section class="panel" id="food">
-  <div class="heading"><h3>Où manger ?</h3><span>Nos pauses gourmandes</span></div>
-  <div class="card">
-    <div class="cardhead"><div class="ico">♡</div><div><b>Ajouter une adresse food</b><small>Restaurant, café, spécialité…</small></div></div>
-    <div class="field"><label>Restaurant / idée</label><input id="foodnom"></div>
-    <div class="two">
-      <div class="field"><label>Jour</label><input id="foodjour" placeholder="Jour 2"></div>
-      <div class="field"><label>Budget / personne (€)</label><input id="foodprix" type="number" min="0"></div>
-    </div>
-    <div class="field"><label>Adresse</label><input id="foodadresse"></div>
-    <div class="field"><label>Notes</label><textarea id="foodnotes"></textarea></div>
-    <div class="actions"><button class="btn" onclick="add('food')">＋ Ajouter</button></div>
+  <div class="heading">
+    <h3>Où manger ?</h3>
+    <span>Nos pauses gourmandes</span>
   </div>
+
+  <div class="card">
+    <div class="cardhead">
+      <div class="ico">♡</div>
+      <div>
+        <b>Ajouter une adresse food</b>
+        <small>Restaurant, café, spécialité…</small>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Restaurant / idée</label>
+      <input id="foodnom" placeholder="Nom du restaurant ou du plat">
+    </div>
+
+    <div class="two">
+      <div class="field">
+        <label>Jour</label>
+        <select id="foodjour">
+          <option value="">Choisir un jour…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Budget / personne (€)</label>
+        <input id="foodprix" type="number" min="0" placeholder="0">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Adresse</label>
+      <input id="foodadresse" placeholder="Adresse ou quartier">
+    </div>
+
+    <div class="field">
+      <label>Notes</label>
+      <textarea id="foodnotes" placeholder="Ce qu'on veut goûter, réservation…"></textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="add('food')">＋ Ajouter</button>
+    </div>
+  </div>
+
   <div id="foodlist"></div>
 </section>
 
 <section class="panel" id="idees">
-  <div class="heading"><h3>Notre coin à idées</h3><span>On garde tout</span></div>
-  <div class="card">
-    <div class="cardhead"><div class="ico">✎</div><div><b>Une envie, une idée ?</b><small>On note avant de décider.</small></div></div>
-    <div class="field"><label>Titre</label><input id="ideetitre"></div>
-    <div class="field"><label>Notre idée</label><textarea id="ideetexte"></textarea></div>
-    <div class="actions"><button class="btn" onclick="add('idees')">＋ Ajouter l'idée</button></div>
+  <div class="heading">
+    <h3>Notre coin à idées</h3>
+    <span>On garde tout</span>
   </div>
+
+  <div class="card">
+    <div class="cardhead">
+      <div class="ico">✎</div>
+      <div>
+        <b>Une envie, une idée ?</b>
+        <small>On note avant de décider.</small>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Titre</label>
+      <input id="ideetitre" placeholder="Ex. Une excursion au coucher du soleil">
+    </div>
+
+    <div class="field">
+      <label>Notre idée</label>
+      <textarea id="ideetexte" placeholder="Décris l'idée, ajoute un lieu ou un lien…"></textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="add('idees')">＋ Ajouter l'idée</button>
+    </div>
+  </div>
+
   <div id="ideeslist"></div>
 </section>
 
-<p class="note">Notre carnet de voyage partagé : les informations sont synchronisées entre les membres du voyage.</p>
+<p class="note">
+  Votre carnet de voyage partagé : les modifications sont synchronisées entre les membres du voyage.
+</p>
+
 </main>
 
 <nav class="bottom">
@@ -213,763 +663,1047 @@ textarea{min-height:76px;resize:vertical}
   <button data-tab="food"><span>♡</span>Food</button>
   <button data-tab="idees"><span>✎</span>Idées</button>
 </nav>
+
 </div>
+<div id="connexion" style="
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  background:#f6f4ef;
+  display:none;
+  overflow:auto;
+  padding:25px 18px;
+  font-family:Inter,system-ui,sans-serif;
+">
+  <div style="
+    max-width:440px;
+    margin:35px auto;
+    background:white;
+    border:1px solid #e8e5dd;
+    border-radius:20px;
+    padding:23px;
+  ">
+    <div style="font-size:11px;letter-spacing:.15em;color:#536b5d;font-weight:700">
+      ESCAPADE · À DEUX
+    </div>
+
+    <h1 style="font:400 30px Georgia,serif;margin:20px 0 8px">
+      Votre carnet de voyage
+    </h1>
+
+    <p style="font-size:13px;color:#737b73;line-height:1.5">
+      Connectez-vous ou créez votre compte pour retrouver le même voyage sur vos deux téléphones.
+    </p>
+
+    <div id="auth-fields">
+      <label>Adresse e-mail</label>
+      <input id="auth-email" type="email" placeholder="vous@exemple.com" autocomplete="email">
+
+      <div style="height:12px"></div>
+
+      <label>Mot de passe</label>
+      <input id="auth-password" type="password" placeholder="6 caractères minimum" autocomplete="current-password">
+
+      <div style="display:flex;gap:8px;margin-top:17px">
+        <button class="btn" id="login-btn" style="flex:1">
+          Se connecter
+        </button>
+        <button class="btn light" id="signup-btn" style="flex:1">
+          Créer un compte
+        </button>
+      </div>
+    </div>
+
+    <div id="auth-message" style="
+      font-size:12px;
+      line-height:1.5;
+      margin-top:14px;
+      color:#536b5d;
+    "></div>
+
+    <div id="trip-fields" hidden>
+      <hr style="border:0;border-top:1px solid #eee;margin:20px 0">
+
+      <h2 style="font:400 23px Georgia,serif">Notre voyage</h2>
+
+      <p style="font-size:12px;color:#737b73">
+        Créez votre voyage ou rejoignez celui de l'autre personne.
+      </p>
+
+      <div class="field">
+        <label>Destination</label>
+        <input id="trip-destination" placeholder="Ex. Bruxelles">
+      </div>
+
+      <div class="two">
+        <div class="field">
+          <label>Nombre de jours</label>
+          <input id="trip-days" type="number" min="1" value="3">
+        </div>
+
+        <div class="field">
+          <label>Nombre de personnes</label>
+          <input id="trip-people" type="number" min="1" value="2">
+        </div>
+      </div>
+
+      <div class="two">
+        <div class="field">
+          <label>Date de départ</label>
+          <input id="trip-start-date" type="date">
+        </div>
+
+        <div class="field">
+          <label>Date de retour</label>
+          <input id="trip-end-date" type="date">
+        </div>
+      </div>
+
+      <button class="btn" id="create-trip" style="width:100%;margin-top:8px">
+        Créer notre voyage
+      </button>
+
+      <div style="text-align:center;color:#929a91;font-size:11px;margin:18px">
+        OU REJOINDRE UN VOYAGE
+      </div>
+
+      <div class="field">
+        <label>Code d'invitation</label>
+        <input id="invite-code" placeholder="Code transmis par l'autre personne">
+      </div>
+
+      <button class="btn light" id="join-trip" style="width:100%">
+        Rejoindre le voyage
+      </button>
+
+      <div id="trip-list" style="margin-top:15px"></div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const keys={
- vol:['compagnie','volprix','aller','retour','aeroports','vollien','volnotes'],
- hotel:['nomhotel','adressehotel','checkin','checkout','nuits','hotelprix','hotellien','hotelnotes'],
- transfert:['moyen','trajet','duree','transprix','translien']
+/* =========================================
+   CONFIGURATION SUPABASE
+========================================= */
+
+const SUPABASE_URL = 'https://usbtpprbimdlzblnpjmz.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_scK5n8RbqukKRqm7q7TcuQ_8Kb52Ym0';
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const $ = id => document.getElementById(id);
+
+let user = null;
+let trip = null;
+let channel = null;
+
+let data = {
+  vol: {},
+  hotel: {},
+  transfert: {},
+  activites: [],
+  food: [],
+  idees: []
 };
-let data={vol:{},hotel:{},transfert:{},activites:[],food:[],idees:[]};
-const $=id=>document.getElementById(id);
-const euro=n=>(Number(n)||0).toLocaleString('fr-FR')+' €';
 
-function esc(s){
- return String(s||'').replace(/[&<>"']/g,c=>({
- '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
- }[c]));
+const categories = {
+  vol: 'flight',
+  hotel: 'hotel',
+  transfert: 'transfer',
+  activites: 'activity',
+  food: 'food',
+  idees: 'note'
+};
+
+function euro(value) {
+  return (Number(value) || 0).toLocaleString('fr-FR') + ' €';
 }
 
-function persist(){
- localStorage.setItem('escapadeTrip',JSON.stringify(data));
- total();
+function safe(value) {
+  return String(value || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[c]);
 }
 
-function total(){
- let n=Number(data.vol.volprix||0)+Number(data.hotel.hotelprix||0)+Number(data.transfert.transprix||0);
- ['activites','food'].forEach(k=>data[k].forEach(x=>n+=Number(x.price||0)*2));
- $('total').textContent=euro(n);
+function showMessage(message) {
+  $('auth-message').textContent = message;
 }
 
-function save(k){
- keys[k].forEach(id=>data[k][id]=$(id).value);
- persist();
- let d=data[k];
- let title=d.compagnie||d.nomhotel||d.moyen||'Informations enregistrées';
- let desc=k==='vol'?
- (d.aeroports+'\nAller : '+d.aller+' · Retour : '+d.retour+'\n'+d.volnotes):
- k==='hotel'?
- (d.adressehotel+'\n'+d.checkin+' → '+d.checkout+' · '+d.nuits+' nuit(s)\n'+d.hotelnotes):
- (d.trajet+'\nDurée : '+d.duree);
- let price=d.volprix||d.hotelprix||d.transprix;
- let url=d.vollien||d.hotellien||d.translien;
- $(k+'view').innerHTML='<div class="item"><div class="itemtop"><b>'+esc(title)+'</b><span class="price">'+(price?euro(price):'')+'</span></div><p>'+esc(desc)+'</p>'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener">Ouvrir le lien ↗</a>':'')+'</div>';
+/* =========================================
+   NAVIGATION
+========================================= */
+
+function tab(id) {
+  document.querySelectorAll('.panel').forEach(panel => {
+    panel.classList.toggle('active', panel.id === id);
+  });
+
+  document.querySelectorAll('[data-tab]').forEach(button => {
+    button.classList.toggle('active', button.dataset.tab === id);
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function add(k){
- let x;
- if(k==='activites'){
-  x={name:$('actnom').value,day:$('actjour').value,price:$('actprix').value,place:$('actlieu').value,detail:$('acttrajet').value,link:$('actlien').value};
-  ['actnom','actjour','actprix','actlieu','acttrajet','actlien'].forEach(id=>$(id).value='');
- }else if(k==='food'){
-  x={name:$('foodnom').value,day:$('foodjour').value,price:$('foodprix').value,place:$('foodadresse').value,detail:$('foodnotes').value};
-  ['foodnom','foodjour','foodprix','foodadresse','foodnotes'].forEach(id=>$(id).value='');
- }else{
-  x={name:$('ideetitre').value||'Idée',detail:$('ideetexte').value};
-  $('ideetitre').value='';$('ideetexte').value='';
- }
- if(!x.name.trim())return alert('Ajoute un titre ou un nom.');
- data[k].push(x);
- persist();
- render(k);
-}
-
-function render(k){
- let el=$(k+'list');
- el.innerHTML=data[k].length?data[k].map((x,i)=>
- '<div class="item"><div class="itemtop"><div><b>'+esc(x.name)+'</b><p>'+esc(x.day||x.place||'')+'</p></div><span class="price">'+(x.price?euro(x.price)+(k==='idees'?'':' / pers.'):'')+'</span></div><p>'+esc(x.detail||'')+'</p>'+(x.link?'<p><a target="_blank" rel="noopener" href="'+esc(x.link)+'">Ouvrir le lien ↗</a></p>':'')+'<button class="delete" onclick="del(\''+k+'\','+i+')">Supprimer</button></div>'
- ).join(''):'<div class="empty">Rien pour le moment — ajoutez votre première idée ♡</div>';
-}
-
-function del(k,i){
- data[k].splice(i,1);
- persist();
- render(k);
-}
-
-function tab(id){
- document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
- document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
- window.scrollTo({top:0,behavior:'smooth'});
-}
-
-document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>tab(b.dataset.tab)));
-try{
- let old=JSON.parse(localStorage.getItem('escapadeTrip')||'null');
- if(old)data=old;
-}catch(e){}
-Object.keys(keys).forEach(k=>{
- keys[k].forEach(id=>$(id).value=data[k][id]||'');
- if(Object.values(data[k]).some(Boolean))save(k);
+document.querySelectorAll('[data-tab]').forEach(button => {
+  button.addEventListener('click', () => tab(button.dataset.tab));
 });
-['activites','food','idees'].forEach(render);
-total();
-</script>
-<script>
-// Connexion et synchronisation partagée Escapade
-(function(){
- const PROJECT_URL='https://usbtpprbimdlzblnpjmz.supabase.co';
- const PUBLISHABLE_KEY='sb_publishable_scK5n8RbqukKRqm7q7TcuQ_8Kb52Ym0';
 
- const app=document.querySelector('.app');
- app.hidden=true;
+/* =========================================
+   CONNEXION / INSCRIPTION
+========================================= */
 
- const gate=document.createElement('div');
- gate.id='escapade-gate';
- gate.style.cssText='min-height:100vh;background:#f6f4ef;color:#252b27;padding:28px 18px;font-family:Inter,system-ui,sans-serif;display:grid;place-items:center';
+async function authenticate(mode) {
+  const email = $('auth-email').value.trim();
+  const password = $('auth-password').value;
 
- gate.innerHTML=`
- <div style="width:min(100%,440px);background:white;border:1px solid #e8e5dd;border-radius:20px;padding:22px;box-shadow:0 12px 40px #0000000d">
- <div style="font-size:11px;letter-spacing:.18em;color:#536b5d;font-weight:700">ESCAPADE · À DEUX</div>
- <h1 style="font:400 30px Georgia,serif;margin:18px 0 8px">Votre carnet de voyage</h1>
- <p style="font-size:13px;color:#737b73;line-height:1.5">Connectez-vous ou créez votre compte pour retrouver le même voyage sur vos deux téléphones.</p>
-
- <div id="auth-fields">
- <label style="display:block;font-size:12px;margin:14px 0 5px">Adresse e-mail</label>
- <input id="auth-email" type="email" autocomplete="email" placeholder="vous@exemple.com" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px">
-
- <label style="display:block;font-size:12px;margin:12px 0 5px">Mot de passe</label>
- <input id="auth-password" type="password" autocomplete="current-password" placeholder="6 caractères minimum" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px">
-
- <div style="display:flex;gap:8px;margin-top:16px">
- <button id="login-btn" style="flex:1;padding:12px;border:0;border-radius:10px;background:#31483e;color:white;font-weight:700">Se connecter</button>
- <button id="signup-btn" style="flex:1;padding:12px;border:1px solid #31483e;border-radius:10px;background:white;color:#31483e;font-weight:700">Créer un compte</button>
- </div>
- </div>
-
- <div id="gate-message" role="status" style="font-size:12px;line-height:1.5;margin-top:13px;color:#536b5d"></div>
-
- <div id="trip-fields" hidden style="margin-top:18px">
- <hr style="border:0;border-top:1px solid #eee;margin:18px 0">
- <h2 style="font:400 22px Georgia,serif">Votre voyage</h2>
- <p style="font-size:12px;color:#737b73">Créez le voyage ou rejoignez celui de l'autre personne avec son code privé.</p>
-
- <label style="display:block;font-size:12px;margin:12px 0 5px">Destination</label>
- <input id="trip-destination" placeholder="Ex. Bruxelles" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px">
-
- <div style="display:flex;gap:8px">
- <div style="flex:1">
- <label style="display:block;font-size:12px;margin:12px 0 5px">Nombre de jours</label>
- <input id="trip-days" type="number" min="1" value="3" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px">
- </div>
- <div style="flex:1">
- <label style="display:block;font-size:12px;margin:12px 0 5px">Nombre de personnes</label>
- <input id="trip-people" type="number" min="1" value="2" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px">
- </div>
- </div>
-
- <button id="create-trip" style="width:100%;margin-top:12px;padding:12px;border:0;border-radius:10px;background:#31483e;color:white;font-weight:700">Créer notre voyage</button>
-
- <div style="text-align:center;font-size:11px;color:#888;margin:13px">ou rejoindre un voyage existant</div>
-
- <label style="display:block;font-size:12px;margin:8px 0 5px">Code d'invitation</label>
- <input id="invite-code" placeholder="Code reçu de l'autre personne" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px">
-
- <button id="join-trip" style="width:100%;margin-top:9px;padding:12px;border:1px solid #31483e;border-radius:10px;background:white;color:#31483e;font-weight:700">Rejoindre le voyage</button>
-
- <div id="trip-list" style="margin-top:12px"></div>
- </div>
- </div>`;
-
- document.body.insertBefore(gate,app);
-
- function message(s){
-  document.getElementById('gate-message').textContent=s||'';
- }
-
- function loadSdk(){
-  return new Promise((resolve,reject)=>{
-   if(window.supabase){resolve();return}
-   const s=document.createElement('script');
-   s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-   s.onload=resolve;
-   s.onerror=reject;
-   document.head.appendChild(s);
-  });
- }
-
- loadSdk().then(async()=>{
-  const db=window.supabase.createClient(PROJECT_URL,PUBLISHABLE_KEY);
-  let user=null,trip=null,channel=null,items=[];
-
-  const $=id=>document.getElementById(id);
-
-  const categories={
-   vol:'flight',
-   hotel:'hotel',
-   transfert:'transfer',
-   activites:'activity',
-   food:'food',
-   idees:'note'
-  };
-
-  const blank=()=>({
-   vol:{},
-   hotel:{},
-   transfert:{},
-   activites:[],
-   food:[],
-   idees:[]
-  });
-
-  async function auth(mode){
-   message('Connexion en cours…');
-
-   const email=$('auth-email').value.trim();
-   const password=$('auth-password').value;
-
-   if(!email||!password){
-    message('Renseigne ton e-mail et ton mot de passe.');
+  if (!email || !password) {
+    showMessage('Renseigne ton adresse e-mail et ton mot de passe.');
     return;
-   }
-
-   const result=mode==='signup'
-    ?await db.auth.signUp({email,password})
-    :await db.auth.signInWithPassword({email,password});
-
-   if(result.error){
-    message(result.error.message);
-    return;
-   }
-
-   if(mode==='signup'&&!result.data.session){
-    message('Compte créé ! Vérifie tes e-mails pour confirmer ton adresse, puis connecte-toi.');
-    return;
-   }
-
-   user=result.data.user;
-   await afterAuth();
   }
 
-  $('login-btn').onclick=()=>auth('login');
-  $('signup-btn').onclick=()=>auth('signup');
+  if (password.length < 6) {
+    showMessage('Le mot de passe doit contenir au moins 6 caractères.');
+    return;
+  }
 
-  async function afterAuth(){
-   $('auth-fields').hidden=true;
-   $('trip-fields').hidden=false;
-   message('Connecté : '+user.email);
+  showMessage('Connexion en cours…');
 
-   const {data,error}=await db
+  let result;
+
+  if (mode === 'signup') {
+    result = await db.auth.signUp({
+      email,
+      password
+    });
+  } else {
+    result = await db.auth.signInWithPassword({
+      email,
+      password
+    });
+  }
+
+  if (result.error) {
+    showMessage(result.error.message);
+    return;
+  }
+
+  if (mode === 'signup' && !result.data.session) {
+    showMessage(
+      'Compte créé ! Vérifie tes e-mails pour confirmer ton adresse, puis connecte-toi.'
+    );
+    return;
+  }
+
+  user = result.data.user;
+
+  await afterLogin();
+}
+
+$('login-btn').onclick = () => authenticate('login');
+$('signup-btn').onclick = () => authenticate('signup');
+
+/* =========================================
+   APRÈS CONNEXION
+========================================= */
+
+async function afterLogin() {
+  $('auth-fields').hidden = true;
+  $('trip-fields').hidden = false;
+
+  showMessage('Connecté avec ' + user.email);
+
+  const { data: trips, error } = await db
     .from('trips')
     .select('*')
-    .order('created_at',{ascending:false});
+    .order('created_at', { ascending: false });
 
-   if(error){
-    message('Impossible de charger les voyages : '+error.message);
+  if (error) {
+    showMessage('Erreur de chargement : ' + error.message);
     return;
-   }
+  }
 
-   if(data&&data.length){
-    $('trip-list').innerHTML=
-     '<p style="font-size:12px">Voyage(s) associé(s) à ce compte :</p>'+
-     data.map(t=>
-      '<button data-trip="'+t.id+'" style="display:block;width:100%;text-align:left;margin:6px 0;padding:11px;border:1px solid #ddd;border-radius:10px;background:#faf9f6;color:#31483e">'+
-      safe(t.destination)+' · '+safe(t.name)+
-      '</button>'
-     ).join('');
+  if (trips && trips.length > 0) {
+    $('trip-list').innerHTML =
+      '<p style="font-size:12px">Tes voyages :</p>' +
+      trips.map(t => `
+        <button data-trip="${safe(t.id)}"
+          style="display:block;width:100%;text-align:left;margin:6px 0;padding:12px;border:1px solid #ddd;border-radius:10px;background:#faf9f6;color:#31483e">
+          ${safe(t.destination)} · ${safe(t.name)}
+        </button>
+      `).join('');
 
-    $('trip-list').querySelectorAll('[data-trip]').forEach(b=>{
-     b.onclick=()=>openTrip(b.dataset.trip);
+    document.querySelectorAll('[data-trip]').forEach(button => {
+      button.onclick = () => openTrip(button.dataset.trip);
     });
 
-    if(data.length===1)openTrip(data[0].id);
-   }
+    if (trips.length === 1) {
+      await openTrip(trips[0].id);
+    }
+  }
+}
+
+/* =========================================
+   CRÉATION DU VOYAGE
+========================================= */
+
+$('create-trip').onclick = async () => {
+  const destination = $('trip-destination').value.trim();
+  const days = Number($('trip-days').value);
+  const people = Number($('trip-people').value);
+  const startDate = $('trip-start-date').value;
+  const endDate = $('trip-end-date').value;
+
+  if (!destination || days < 1 || people < 1) {
+    showMessage('Complète la destination, le nombre de jours et de personnes.');
+    return;
   }
 
-  function safe(v){
-   return String(v||'').replace(/[&<>"']/g,c=>({
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;',
-    '"':'&quot;',
-    "'":'&#39;'
-   }[c]));
+  if (startDate && endDate && endDate < startDate) {
+    showMessage('La date de retour doit être après la date de départ.');
+    return;
   }
 
-  $('create-trip').onclick=async()=>{
-   const destination=$('trip-destination').value.trim();
-   const days=Number($('trip-days').value);
-   const people=Number($('trip-people').value);
+  showMessage('Création du voyage…');
 
-   if(!destination||days<1||people<1){
-    message('Renseigne la destination, le nombre de jours et de personnes.');
+  const { data: result, error } = await db.rpc('create_trip', {
+    p_destination: destination,
+    p_day_count: days,
+    p_person_count: people,
+    p_name: 'Notre voyage'
+  });
+
+  if (error) {
+    showMessage('Erreur : ' + error.message);
     return;
-   }
+  }
 
-   message('Création du voyage…');
+  const newTrip = Array.isArray(result) ? result[0] : result;
+  const tripId = newTrip && typeof newTrip === 'object'
+    ? newTrip.id
+    : newTrip;
 
-   const {data,error}=await db.rpc('create_trip',{
-    p_destination:destination,
-    p_day_count:days,
-    p_person_count:people,
-    p_name:'Notre voyage'
-   });
-
-   if(error){
-    message('Erreur : '+error.message);
+  if (!tripId) {
+    showMessage('Le voyage a été créé, mais son identifiant est introuvable.');
     return;
-   }
+  }
 
-   await openTrip(data.id);
+  // Enregistrement des dates du séjour
+  const { error: dateError } = await db
+    .from('trips')
+    .update({
+      start_date: startDate || null,
+      end_date: endDate || null
+    })
+    .eq('id', tripId);
+
+  if (dateError) {
+    showMessage('Voyage créé, mais erreur sur les dates : ' + dateError.message);
+    return;
+  }
+
+  await openTrip(tripId);
+};
+
+/* =========================================
+   REJOINDRE UN VOYAGE
+========================================= */
+
+$('join-trip').onclick = async () => {
+  const code = $('invite-code').value.trim();
+
+  if (!code) {
+    showMessage('Entre le code d’invitation.');
+    return;
+  }
+
+  showMessage('Connexion au voyage…');
+
+  const { data: result, error } = await db.rpc('join_trip', {
+    p_invite_code: code
+  });
+
+  if (error) {
+    showMessage('Erreur : ' + error.message);
+    return;
+  }
+
+  const tripId = typeof result === 'object' && result !== null
+    ? result.id
+    : result;
+
+  if (!tripId) {
+    showMessage('Impossible de retrouver ce voyage.');
+    return;
+  }
+
+  await openTrip(tripId);
+};
+
+/* =========================================
+   TRANSFORMATION DES DONNÉES
+========================================= */
+
+function blankData() {
+  return {
+    vol: {},
+    hotel: {},
+    transfert: {},
+    activites: [],
+    food: [],
+    idees: []
+  };
+}
+
+function toFrontend(row) {
+  if (row.category === 'flight') {
+    const parts = (row.duration || '').split(' · ');
+
+    return {
+      id: row.id,
+      compagnie: row.title,
+      aller: parts[0] || '',
+      retour: parts[1] || '',
+      aeroports: row.address || '',
+      volnotes: row.details || ''
+    };
+  }
+
+  if (row.category === 'hotel') {
+    return {
+      id: row.id,
+      nomhotel: row.title,
+      adressehotel: row.address || ''
+    };
+  }
+
+  if (row.category === 'transfer') {
+    return {
+      id: row.id,
+      moyen: row.title,
+      trajet: row.details || '',
+      duree: row.duration || '',
+      transprix: row.price || 0,
+      translien: row.url || ''
+    };
+  }
+
+  if (row.category === 'activity' || row.category === 'food') {
+    return {
+      id: row.id,
+      name: row.title,
+      day: row.day_number ? 'Jour ' + row.day_number : '',
+      price: row.price || 0,
+      place: row.address || '',
+      detail: row.details || '',
+      link: row.url || ''
+    };
+  }
+
+  return {
+    id: row.id,
+    name: row.title,
+    detail: row.details || ''
+  };
+}
+
+function toRow(k, x) {
+  const row = {
+    trip_id: trip.id,
+    category: categories[k],
+    title: '',
+    day_number: null,
+    details: '',
+    address: null,
+    url: null,
+    price: 0,
+    price_type: ['activites', 'food'].includes(k)
+      ? 'per_person'
+      : 'total',
+    duration: null,
+    transport_mode: null,
+    created_by: user.id
   };
 
-  $('join-trip').onclick=async()=>{
-   const code=$('invite-code').value.trim();
-
-   if(!code){
-    message('Entre le code d’invitation.');
-    return;
-   }
-
-   message('Connexion au voyage…');
-
-   const {data,error}=await db.rpc('join_trip',{
-    p_invite_code:code
-   });
-
-   if(error){
-    message('Erreur : '+error.message);
-    return;
-   }
-
-   await openTrip(data);
-  };
-
-  function toFrontend(row){
-   const d=row.details||'';
-
-   if(row.category==='flight')
-    return {
-     id:row.id,
-     compagnie:row.title,
-     volprix:row.price,
-     aller:row.duration||'',
-     retour:'',
-     aeroports:row.address||'',
-     vollien:row.url||'',
-     volnotes:d
-    };
-
-   if(row.category==='hotel')
-    return {
-     id:row.id,
-     nomhotel:row.title,
-     adressehotel:row.address||'',
-     hotelprix:row.price,
-     hotellien:row.url||'',
-     hotelnotes:d,
-     checkin:'',
-     checkout:'',
-     nuits:''
-    };
-
-   if(row.category==='transfer')
-    return {
-     id:row.id,
-     moyen:row.title,
-     trajet:d,
-     duree:row.duration||'',
-     transprix:row.price,
-     translien:row.url||''
-    };
-
-   if(row.category==='activity'||row.category==='food')
-    return {
-     id:row.id,
-     name:row.title,
-     day:row.day_number?'Jour '+row.day_number:'',
-     price:row.price,
-     place:row.address||'',
-     detail:d,
-     link:row.url||''
-    };
-
-   return {
-    id:row.id,
-    name:row.title,
-    detail:d
-   };
+  if (k === 'vol') {
+    row.title = x.compagnie || 'Vol';
+    row.address = x.aeroports || null;
+    row.details = x.volnotes || '';
+    row.duration = [x.aller, x.retour].filter(Boolean).join(' · ') || null;
   }
 
-  function toRow(k,x){
-   const row={
-    trip_id:trip.id,
-    category:categories[k],
-    title:'',
-    day_number:null,
-    details:'',
-    address:null,
-    url:null,
-    price:Number(x.price||x.volprix||x.hotelprix||x.transprix||0),
-    price_type:['activites','food'].includes(k)?'per_person':'total',
-    duration:null,
-    transport_mode:null,
-    created_by:user.id
-   };
-
-   if(k==='vol'){
-    row.title=x.compagnie||'Vol';
-    row.address=x.aeroports||null;
-    row.url=x.vollien||null;
-    row.details=x.volnotes||'';
-    row.duration=[x.aller,x.retour].filter(Boolean).join(' · ')||null;
-    row.price=Number(x.volprix||0);
-   }
-
-   if(k==='hotel'){
-    row.title=x.nomhotel||'Hôtel';
-    row.address=x.adressehotel||null;
-    row.url=x.hotellien||null;
-    row.details=[
-     x.checkin&&('Arrivée : '+x.checkin),
-     x.checkout&&('Départ : '+x.checkout),
-     x.nuits&&(x.nuits+' nuit(s)'),
-     x.hotelnotes
-    ].filter(Boolean).join('\n');
-    row.price=Number(x.hotelprix||0);
-   }
-
-   if(k==='transfert'){
-    row.title=x.moyen||'Transfert';
-    row.details=x.trajet||'';
-    row.duration=x.duree||null;
-    row.url=x.translien||null;
-    row.price=Number(x.transprix||0);
-    row.transport_mode=x.moyen||null;
-   }
-
-   if(k==='activites'||k==='food'){
-    row.title=x.name||'Sans titre';
-    row.details=x.detail||'';
-    row.address=x.place||null;
-    row.url=x.link||null;
-    row.day_number=Number(String(x.day||'').match(/\d+/)?.[0])||null;
-    row.price=Number(x.price||0);
-   }
-
-   if(k==='idees'){
-    row.title=x.name||'Idée';
-    row.details=x.detail||'';
-    row.price=0;
-   }
-
-   return row;
+  if (k === 'hotel') {
+    row.title = x.nomhotel || 'Hôtel';
+    row.address = x.adressehotel || null;
   }
 
-  async function openTrip(id){
-   const {data:t,error:te}=await db
+  if (k === 'transfert') {
+    row.title = x.moyen || 'Transfert';
+    row.details = x.trajet || '';
+    row.duration = x.duree || null;
+    row.url = x.translien || null;
+    row.price = Number(x.transprix || 0);
+    row.transport_mode = x.moyen || null;
+  }
+
+  if (k === 'activites' || k === 'food') {
+    row.title = x.name || 'Sans titre';
+    row.details = x.detail || '';
+    row.address = x.place || null;
+    row.url = x.link || null;
+    row.day_number =
+      Number(String(x.day || '').match(/\d+/)?.[0]) || null;
+    row.price = Number(x.price || 0);
+  }
+
+  if (k === 'idees') {
+    row.title = x.name || 'Idée';
+    row.details = x.detail || '';
+  }
+
+  return row;
+}
+
+/* =========================================
+   OUVERTURE DU VOYAGE
+========================================= */
+
+async function openTrip(id) {
+  showMessage('Ouverture du voyage…');
+
+  const { data: currentTrip, error } = await db
     .from('trips')
     .select('*')
-    .eq('id',id)
+    .eq('id', id)
     .single();
 
-   if(te){
-    message(te.message);
+  if (error) {
+    showMessage(error.message);
     return;
-   }
+  }
 
-   trip=t;
+  trip = currentTrip;
 
-   const {data:rows,error}=await db
+  const { data: rows, error: rowsError } = await db
     .from('trip_items')
     .select('*')
-    .eq('trip_id',trip.id)
+    .eq('trip_id', trip.id)
     .order('created_at');
 
-   if(error){
-    message(error.message);
+  if (rowsError) {
+    showMessage(rowsError.message);
     return;
-   }
+  }
 
-   items=rows||[];
-   data=blank();
+  data = blankData();
 
-   items.forEach(r=>{
-    const k=Object.keys(categories).find(key=>categories[key]===r.category);
-    if(!k)return;
+  (rows || []).forEach(row => {
+    const key = Object.keys(categories).find(
+      k => categories[k] === row.category
+    );
 
-    const x=toFrontend(r);
+    if (!key) return;
 
-    if(['vol','hotel','transfert'].includes(k))
-     data[k]=x;
-    else
-     data[k].push(x);
-   });
+    const item = toFrontend(row);
 
-   ['vol','hotel','transfert'].forEach(k=>{
-    const fields={
-     vol:['compagnie','volprix','aller','retour','aeroports','vollien','volnotes'],
-     hotel:['nomhotel','adressehotel','checkin','checkout','nuits','hotelprix','hotellien','hotelnotes'],
-     transfert:['moyen','trajet','duree','transprix','translien']
-    }[k];
+    if (['vol', 'hotel', 'transfert'].includes(key)) {
+      data[key] = item;
+    } else {
+      data[key].push(item);
+    }
+  });
 
-    fields.forEach(id=>{
-     const el=$(id);
-     if(el)el.value=data[k][id]||'';
-    });
+  fillFields();
+  renderAll();
+  configureDays();
 
-    if(data[k].id)renderSaved(k);
-   });
+  const hero = document.querySelector('.hero');
 
-   ['activites','food','idees'].forEach(render);
+  hero.querySelector('h1').textContent = trip.destination;
 
-   const h=app.querySelector('.hero');
-   h.querySelector('h1').innerHTML=safe(trip.destination);
-   h.querySelector('p').textContent='Notre voyage · '+trip.day_count+' jours · '+trip.person_count+' personne(s)';
-   h.querySelector('.pills').innerHTML=
-    '<span class="pill">'+safe(trip.destination)+'</span>'+
-    '<span class="pill">Code : '+safe(trip.invite_code)+'</span>';
+  hero.querySelector('p').textContent =
+    'Notre voyage · ' + trip.day_count +
+    ' jours · ' + trip.person_count + ' personne(s)';
 
-   let bar=document.getElementById('trip-account-bar');
+  $('destination-pill').textContent = '✈ ' + trip.destination;
 
-   if(!bar){
-    bar=document.createElement('div');
-    bar.id='trip-account-bar';
-    bar.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 15px;background:#e8e4d9;color:#31483e;font:12px system-ui';
-    h.after(bar);
-   }
+  const accountBar = document.createElement('div');
+  accountBar.id = 'trip-account-bar';
+  accountBar.style.cssText =
+    'padding:10px 15px;background:#e8e4d9;color:#31483e;font-size:12px;display:flex;justify-content:space-between;align-items:center;gap:10px';
 
-   bar.innerHTML=
-    '<span>Connecté · '+safe(user.email)+
-    '<br><b>Code à partager : '+safe(trip.invite_code)+'</b></span>'+
-    '<button id="logout-btn" style="border:0;border-radius:8px;padding:8px 10px;background:#31483e;color:white">Déconnexion</button>';
+  accountBar.innerHTML = `
+    <span>
+      Connecté · ${safe(user.email)}<br>
+      <b>Code à partager : ${safe(trip.invite_code)}</b>
+    </span>
+    <button id="logout-btn"
+      style="border:0;border-radius:8px;padding:8px 10px;background:#31483e;color:white">
+      Déconnexion
+    </button>
+  `;
 
-   $('logout-btn').onclick=async()=>{
-    if(channel)await db.removeChannel(channel);
+  const previousBar = $('trip-account-bar');
+  if (previousBar) previousBar.remove();
+
+  hero.after(accountBar);
+
+  $('logout-btn').onclick = async () => {
+    if (channel) await db.removeChannel(channel);
     await db.auth.signOut();
     location.reload();
-   };
+  };
 
-   app.hidden=false;
-   gate.hidden=true;
-   total();
+  $('connexion').style.display = 'none';
+  $('connexion').remove();
+  $('app')?.removeAttribute('hidden');
 
-   if(channel)await db.removeChannel(channel);
+  document.querySelector('.app').hidden = false;
 
-   channel=db.channel('trip-'+trip.id)
-    .on('postgres_changes',{
-     event:'*',
-     schema:'public',
-     table:'trip_items',
-     filter:'trip_id=eq.'+trip.id
-    },()=>refresh())
+  const note = document.querySelector('.note');
+  if (note) {
+    note.textContent =
+      'Voyage partagé : vos modifications sont synchronisées entre les membres du voyage.';
+  }
+
+  if (channel) await db.removeChannel(channel);
+
+  channel = db
+    .channel('trip-' + trip.id)
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'trip_items',
+        filter: 'trip_id=eq.' + trip.id
+      },
+      () => refresh()
+    )
     .subscribe();
 
-   const note=app.querySelector('.note');
+  updateTotal();
+}
 
-   if(note)
-    note.textContent='Voyage partagé : chaque ajout ou modification est synchronisé avec les autres membres du voyage.';
+/* =========================================
+   REMPLIR LES FORMULAIRES
+========================================= */
+
+function fillFields() {
+  const fields = {
+    vol: ['compagnie', 'aller', 'retour', 'aeroports', 'volnotes'],
+    hotel: ['nomhotel', 'adressehotel'],
+    transfert: ['moyen', 'trajet', 'duree', 'transprix', 'translien']
+  };
+
+  Object.keys(fields).forEach(k => {
+    fields[k].forEach(id => {
+      if ($(id)) {
+        const field = {
+          compagnie: 'compagnie',
+          aller: 'aller',
+          retour: 'retour',
+          aeroports: 'aeroports',
+          volnotes: 'volnotes',
+          nomhotel: 'nomhotel',
+          adressehotel: 'adressehotel',
+          moyen: 'moyen',
+          trajet: 'trajet',
+          duree: 'duree',
+          transprix: 'transprix',
+          translien: 'translien'
+        }[id];
+
+        $(id).value = data[k][field] || '';
+      }
+    });
+  });
+}
+
+/* =========================================
+   JOURS DU VOYAGE
+========================================= */
+
+function configureDays() {
+  if (!trip) return;
+
+  ['actjour', 'foodjour'].forEach(id => {
+    const select = $(id);
+    if (!select) return;
+
+    const previousValue = select.value;
+
+    select.innerHTML =
+      '<option value="">Choisir un jour…</option>';
+
+    for (let i = 1; i <= Number(trip.day_count); i++) {
+      const option = document.createElement('option');
+      option.value = 'Jour ' + i;
+      option.textContent = 'Jour ' + i;
+      select.appendChild(option);
+    }
+
+    if (previousValue) select.value = previousValue;
+  });
+}
+
+/* =========================================
+   ENREGISTRER VOL, HÔTEL, TRANSFERT
+========================================= */
+
+async function save(k) {
+  const fields = {
+    vol: ['compagnie', 'aller', 'retour', 'aeroports', 'volnotes'],
+    hotel: ['nomhotel', 'adressehotel'],
+    transfert: ['moyen', 'trajet', 'duree', 'transprix', 'translien']
+  };
+
+  fields[k].forEach(id => {
+    data[k][id] = $(id).value;
+  });
+
+  const row = toRow(k, data[k]);
+
+  let result;
+
+  if (data[k].id) {
+    result = await db
+      .from('trip_items')
+      .update(row)
+      .eq('id', data[k].id)
+      .select()
+      .single();
+  } else {
+    result = await db
+      .from('trip_items')
+      .insert(row)
+      .select()
+      .single();
   }
 
-  async function refresh(){
-   const {data:rows,error}=await db
-    .from('trip_items')
-    .select('*')
-    .eq('trip_id',trip.id)
-    .order('created_at');
-
-   if(error)return;
-
-   items=rows||[];
-   data=blank();
-
-   items.forEach(r=>{
-    const k=Object.keys(categories).find(key=>categories[key]===r.category);
-    if(!k)return;
-
-    const x=toFrontend(r);
-
-    if(['vol','hotel','transfert'].includes(k))
-     data[k]=x;
-    else
-     data[k].push(x);
-   });
-
-   ['activites','food','idees'].forEach(render);
-
-   ['vol','hotel','transfert'].forEach(k=>{
-    if(data[k].id)renderSaved(k);
-   });
-
-   total();
-  }
-
-  async function save(k){
-   const ids={
-    vol:['compagnie','volprix','aller','retour','aeroports','vollien','volnotes'],
-    hotel:['nomhotel','adressehotel','checkin','checkout','nuits','hotelprix','hotellien','hotelnotes'],
-    transfert:['moyen','trajet','duree','transprix','translien']
-   };
-
-   ids[k].forEach(id=>data[k][id]=$(id).value);
-
-   const row=toRow(k,data[k]);
-   let result;
-
-   if(data[k].id)
-    result=await db.from('trip_items').update(row).eq('id',data[k].id).select().single();
-   else
-    result=await db.from('trip_items').insert(row).select().single();
-
-   if(result.error){
-    alert('Erreur d’enregistrement : '+result.error.message);
+  if (result.error) {
+    alert('Erreur : ' + result.error.message);
     return;
-   }
-
-   data[k]=toFrontend(result.data);
-   renderSaved(k);
-   total();
   }
 
-  function renderSaved(k){
-   const d=data[k];
-   const title=d.compagnie||d.nomhotel||d.moyen||'Informations enregistrées';
+  data[k] = toFrontend(result.data);
 
-   const desc=k==='vol'
-    ?(d.aeroports+'\n'+(d.aller||'')+' '+(d.volnotes||''))
-    :k==='hotel'
-    ?(d.adressehotel+'\n'+(d.hotelnotes||''))
-    :d.trajet+'\nDurée : '+(d.duree||'');
+  fillFields();
+  renderSaved(k);
+  await refresh();
+}
 
-   const price=d.volprix||d.hotelprix||d.transprix;
-   const url=d.vollien||d.hotellien||d.translien;
+/* =========================================
+   AFFICHAGE VOL, HÔTEL, TRANSFERT
+========================================= */
 
-   $(k+'view').innerHTML=
-    '<div class="item"><div class="itemtop"><b>'+safe(title)+'</b>'+
-    '<span class="price">'+(price?euro(price):'')+'</span></div>'+
-    '<p>'+safe(desc)+'</p>'+
-    (url?'<a href="'+safe(url)+'" target="_blank" rel="noopener">Ouvrir le lien ↗</a>':'')+
-    '</div>';
+function renderSaved(k) {
+  const d = data[k];
+
+  const title =
+    d.compagnie || d.nomhotel || d.moyen || 'Informations enregistrées';
+
+  let description = '';
+
+  if (k === 'vol') {
+    description =
+      (d.aeroports || '') +
+      '\nAller : ' + (d.aller || '') +
+      '\nRetour : ' + (d.retour || '') +
+      '\n' + (d.volnotes || '');
   }
 
-  async function add(k){
-   let x;
+  if (k === 'hotel') {
+    description = d.adressehotel || '';
+  }
 
-   if(k==='activites'){
-    x={
-     name:$('actnom').value,
-     day:$('actjour').value,
-     price:$('actprix').value,
-     place:$('actlieu').value,
-     detail:$('acttrajet').value,
-     link:$('actlien').value
+  if (k === 'transfert') {
+    description =
+      (d.trajet || '') +
+      '\nDurée : ' + (d.duree || '');
+  }
+
+  $(k + 'view').innerHTML = `
+    <div class="item">
+      <div class="itemtop">
+        <b>${safe(title)}</b>
+        <span class="price">
+          ${k === 'transfert' && d.transprix ? euro(d.transprix) : ''}
+        </span>
+      </div>
+      <p>${safe(description)}</p>
+    </div>
+  `;
+}
+
+/* =========================================
+   AJOUTER ACTIVITÉS, FOOD, IDÉES
+========================================= */
+
+async function add(k) {
+  let item;
+
+  if (k === 'activites') {
+    item = {
+      name: $('actnom').value.trim(),
+      day: $('actjour').value,
+      price: $('actprix').value,
+      place: $('actlieu').value,
+      detail: $('acttrajet').value,
+      link: $('actlien').value
     };
+  }
 
-    ['actnom','actjour','actprix','actlieu','acttrajet','actlien'].forEach(id=>$(id).value='');
-
-   }else if(k==='food'){
-    x={
-     name:$('foodnom').value,
-     day:$('foodjour').value,
-     price:$('foodprix').value,
-     place:$('foodadresse').value,
-     detail:$('foodnotes').value
+  if (k === 'food') {
+    item = {
+      name: $('foodnom').value.trim(),
+      day: $('foodjour').value,
+      price: $('foodprix').value,
+      place: $('foodadresse').value,
+      detail: $('foodnotes').value,
+      link: ''
     };
+  }
 
-    ['foodnom','foodjour','foodprix','foodadresse','foodnotes'].forEach(id=>$(id).value='');
-
-   }else{
-    x={
-     name:$('ideetitre').value||'Idée',
-     detail:$('ideetexte').value
+  if (k === 'idees') {
+    item = {
+      name: $('ideetitre').value.trim() || 'Idée',
+      detail: $('ideetexte').value
     };
+  }
 
-    $('ideetitre').value='';
-    $('ideetexte').value='';
-   }
+  if (!item.name) {
+    alert('Ajoute un nom ou un titre.');
+    return;
+  }
 
-   if(!x.name.trim())
-    return alert('Ajoute un titre ou un nom.');
+  const row = toRow(k, item);
 
-   const {data:r,error}=await db
+  const { data: saved, error } = await db
     .from('trip_items')
-    .insert(toRow(k,x))
+    .insert(row)
     .select()
     .single();
 
-   if(error){
-    alert('Erreur d’enregistrement : '+error.message);
+  if (error) {
+    alert('Erreur : ' + error.message);
     return;
-   }
-
-   x.id=r.id;
-   data[k].push(x);
-   render(k);
-   total();
   }
 
-  function render(k){
-   const el=$(k+'list');
+  item.id = saved.id;
 
-   el.innerHTML=data[k].length
-    ?data[k].map((x,i)=>
-     '<div class="item"><div class="itemtop"><div><b>'+
-     safe(x.name)+'</b><p>'+safe(x.day||x.place||'')+
-     '</p></div><span class="price">'+
-     (x.price?euro(x.price)+(k==='idees'?'':' / pers.'):'')+
-     '</span></div><p>'+safe(x.detail||'')+'</p>'+
-     (x.place?'<p><a target="_blank" rel="noopener" href="https://maps.apple.com/?q='+encodeURIComponent(x.place)+'">Ouvrir dans Plans ↗</a></p>':'')+
-     (x.link?'<p><a target="_blank" rel="noopener" href="'+safe(x.link)+'">Ouvrir le lien ↗</a></p>':'')+
-     '<button class="delete" onclick="del(\''+k+'\','+i+')">Supprimer</button></div>'
-    ).join('')
-    :'<div class="empty">Rien pour le moment — ajoutez votre première idée ♡</div>';
+  data[k].push(item);
+
+  if (k === 'activites') {
+    ['actnom', 'actjour', 'actprix', 'actlieu', 'acttrajet', 'actlien']
+      .forEach(id => $(id).value = '');
   }
 
-  async function del(k,i){
-   const x=data[k][i];
-
-   if(x.id){
-    const {error}=await db.from('trip_items').delete().eq('id',x.id);
-
-    if(error){
-     alert(error.message);
-     return;
-    }
-   }
-
-   data[k].splice(i,1);
-   render(k);
-   total();
+  if (k === 'food') {
+    ['foodnom', 'foodjour', 'foodprix', 'foodadresse', 'foodnotes']
+      .forEach(id => $(id).value = '');
   }
 
-  function total(){
-   let n=0;
-
-   items.forEach(r=>{
-    n+=Number(r.price||0)*
-     (r.price_type==='per_person'?Number(trip.person_count||1):1);
-   });
-
-   $('total').textContent=euro(n);
+  if (k === 'idees') {
+    $('ideetitre').value = '';
+    $('ideetexte').value = '';
   }
 
-  window.save=save;
-  window.add=add;
-  window.del=del;
-  window.render=render;
-  window.total=total;
+  render(k);
+  await refresh();
+}
 
-  const {data:{session}}=await db.auth.getSession();
+/* =========================================
+   AFFICHAGE DES LISTES
+========================================= */
 
-  if(session){
-   user=session.user;
-   await afterAuth();
-  }else{
-   gate.hidden=false;
+function render(k) {
+  const el = $(k + 'list');
+
+  if (!data[k].length) {
+    el.innerHTML =
+      '<div class="empty">Rien pour le moment — ajoutez votre première idée ♡</div>';
+    return;
   }
 
-  db.auth.onAuthStateChange(async(_event,session)=>{
-   if(session&&!user){
-    user=session.user;
-    await afterAuth();
-   }
+  el.innerHTML = data[k].map((x, i) => `
+    <div class="item">
+      <div class="itemtop">
+        <div>
+          <b>${safe(x.name)}</b>
+          <p>${safe(x.day || x.place || '')}</p>
+        </div>
+
+        <span class="price">
+          ${x.price ? euro(x.price) + (k === 'idees' ? '' : ' / pers.') : ''}
+        </span>
+      </div>
+
+      <p>${safe(x.detail || '')}</p>
+
+      ${x.place ? `
+        <p>
+          <a target="_blank" rel="noopener"
+            href="https://maps.apple.com/?q=${encodeURIComponent(x.place)}">
+            Ouvrir dans Plans ↗
+          </a>
+        </p>
+      ` : ''}
+
+      ${x.link ? `
+        <p>
+          <a target="_blank" rel="noopener" href="${safe(x.link)}">
+            Ouvrir le lien ↗
+          </a>
+        </p>
+      ` : ''}
+
+      <button class="delete" onclick="del('${k}',${i})">
+        Supprimer
+      </button>
+    </div>
+  `).join('');
+}
+
+function renderAll() {
+  ['vol', 'hotel', 'transfert'].forEach(k => {
+    if (data[k].id) renderSaved(k);
   });
 
- }).catch(()=>{
-  document.getElementById('gate-message').textContent='Impossible de charger la connexion. Vérifie ta connexion internet puis actualise la page.';
- });
-})();
+  ['activites', 'food', 'idees'].forEach(render);
+}
+
+/* =========================================
+   SUPPRESSION
+========================================= */
+
+async function del(k, i) {
+  const item = data[k][i];
+
+  if (!confirm('Supprimer cet élément ?')) return;
+
+  if (item.id) {
+    const { error } = await db
+      .from('trip_items')
+      .delete()
+      .eq('id', item.id);
+
+    if (error) {
+      alert('Erreur : ' + error.message);
+      return;
+    }
+  }
+
+  data[k].splice(i, 1);
+
+  render(k);
+  await refresh();
+}
+
+/* =========================================
+   ACTUALISATION ET SYNCHRONISATION
+========================================= */
+
+async function refresh() {
+  if (!trip) return;
+
+  const { data: rows, error } = await db
+    .from('trip_items')
+    .select('*')
+    .eq('trip_id', trip.id)
+    .order('created_at');
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  data = blankData();
+
+  rows.forEach(row => {
+    const k = Object.keys(categories).find(
+      key => categories[key] === row.category
+    );
+
+    if (!k) return;
+
+    const item = toFrontend(row);
+
+    if (['vol', 'hotel', 'transfert'].includes(k)) {
+      data[k] = item;
+    } else {
+      data[k].push(item);
+    }
+  });
+
+  fillFields();
+  renderAll();
+  updateTotal();
+}
+
+/* =========================================
+   CALCUL DU BUDGET
+========================================= */
+
+async function updateTotal() {
+  if (!trip) return;
+
+  const { data: rows, error } = await db
+    .from('trip_items')
+    .select('price,price_type')
+    .eq('trip_id', trip.id);
+
+  if (error) return;
+
+  let total = 0;
+
+  rows.forEach(row => {
+    const price = Number(row.price || 0);
+
+    if (row.price_type === 'per_person') {
+      total += price * Number(trip.person_count || 1);
+    } else {
+      total += price;
+    }
+  });
+
+  $('total').textContent = euro(total);
+}
+
+/* =========================================
+   DÉMARRAGE
+========================================= */
+
+async function start() {
+  const {
+    data: { session }
+  } = await db.auth.getSession();
+
+  if (session) {
+    user = session.user;
+    await afterLogin();
+  } else {
+    $('connexion').style.display = 'block';
+  }
+
+  db.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_OUT') {
+      location.reload();
+    }
+  });
+}
+
+start();
+
 </script>
+
 </body>
 </html>
