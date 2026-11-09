@@ -233,6 +233,17 @@ main {max-width:720px;margin:auto;padding:20px 15px 110px}
 .day-button.active {background:var(--green);color:#fff}
 .check-row {display:flex;align-items:flex-start;gap:10px}
 .check-row input {width:20px;height:20px;accent-color:var(--green);flex:none;margin:0}
+.saved-card {padding:22px;border-left:5px solid var(--green)}
+.saved-card h4 {font-size:22px;margin:0 0 10px}
+.saved-card p {font-size:15px;color:var(--text);line-height:1.6;white-space:pre-wrap}
+.leg-grid {display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.leg-card {background:#f6f4ef;border-radius:14px;padding:16px;margin:12px 0}
+.leg-card h4 {font:700 15px system-ui;margin:0 0 12px}
+.route-big {font-size:18px!important;font-weight:750}
+.saved-card .itemtop b {font-size:22px}
+.mini-btn {border:0;background:none;color:var(--green);font-size:12px;font-weight:700;padding:8px 10px 2px 0}
+.dashboard-section {margin-bottom:22px}
+.dashboard-section h3 {font:400 21px Georgia,serif;margin:0 0 10px}
 .delete {
   border:0;background:none;color:var(--danger);
   padding:9px 0 0;font-size:11px;
@@ -260,6 +271,7 @@ main {max-width:720px;margin:auto;padding:20px 15px 110px}
   .hero {padding-left:20px}
   .tabs {grid-template-columns:repeat(6,1fr)}
 }
+@media(max-width:560px){.leg-grid{grid-template-columns:1fr}}
 </style>
 </head>
 
@@ -370,8 +382,17 @@ main {max-width:720px;margin:auto;padding:20px 15px 110px}
       <strong id="total">0 €</strong>
     </div>
   </div>
+  <button class="mini-btn" id="new-trip-toggle">＋ Créer un voyage</button>
+  <div class="card hidden" id="new-trip-form">
+    <h3 style="font:400 22px Georgia,serif">Nouveau voyage</h3>
+    <div class="field"><label>Destination</label><input id="new-destination" placeholder="Ex. Rome"></div>
+    <div class="grid2"><div class="field"><label>Date de départ</label><input id="new-start-date" type="date"></div><div class="field"><label>Date de retour</label><input id="new-end-date" type="date"></div></div>
+    <div class="grid2"><div class="field"><label>Nombre de jours</label><input id="new-days" type="number" min="1" value="3"></div><div class="field"><label>Nombre de personnes</label><input id="new-people" type="number" min="1" value="2"></div></div>
+    <button class="btn" id="new-trip-submit">Créer le voyage</button><div class="message" id="new-trip-message"></div>
+  </div>
 
   <nav class="tabs">
+    <button class="tab active" data-tab="infos">▣ Infos importantes</button>
     <button class="tab" data-tab="jours">☷ Par jour</button>
     <button class="tab" data-tab="membres">◎ Membres</button>
     <button class="tab active" data-tab="vol">✈ Vols</button>
@@ -381,6 +402,11 @@ main {max-width:720px;margin:auto;padding:20px 15px 110px}
     <button class="tab" data-tab="food">♡ Nourriture</button>
     <button class="tab" data-tab="idees">✎ Idées</button>
   </nav>
+
+  <section class="panel active" id="infos">
+    <div class="heading"><h3>Infos importantes</h3><span>Tout le séjour en un coup d'œil</span></div>
+    <div id="important-info"></div>
+  </section>
 
   <section class="panel" id="jours">
     <div class="heading"><h3>Programme par jour</h3><span>Tout le séjour</span></div>
@@ -393,39 +419,43 @@ main {max-width:720px;margin:auto;padding:20px 15px 110px}
   </section>
 
   <!-- VOLS -->
-  <section class="panel active" id="vol">
+  <section class="panel" id="vol">
     <div class="heading"><h3>Nos vols</h3><span>Aller & retour</span></div>
-    <div class="card">
+    <div id="flight-list"></div>
+    <button class="mini-btn" id="add-flight-toggle" onclick="toggleForm('flight-form')">＋ Ajouter / modifier les vols</button>
+    <div class="card hidden" id="flight-form">
       <div class="cardhead"><div class="ico">✈</div><div><b>Billets d'avion</b><small>Compagnie, horaires et trajet</small></div></div>
       <div class="field"><label>Compagnie aérienne</label><input id="vol-company" placeholder="Ex. Brussels Airlines"></div>
-      <div class="grid2">
-        <div class="field"><label>Numéro du vol aller (facultatif)</label><input id="vol-out" placeholder="Ex. AF1234"></div>
-        <div class="field"><label>Numéro du vol retour (facultatif)</label><input id="vol-back" placeholder="Ex. AF1235"></div>
+      <div class="field"><label>Lien du site de la compagnie</label><input id="vol-company-url" type="url" placeholder="https://…"></div>
+      <div class="leg-grid">
+        <div class="leg-card"><h4>Vol aller</h4><div class="field"><label>De</label><input id="vol-out-from" placeholder="Ville / aéroport"></div><div class="field"><label>À</label><input id="vol-out-to" placeholder="Ville / aéroport"></div><div class="field"><label>Date et heure</label><input id="vol-out-time" placeholder="12 juin · 09:30"></div><div class="field"><label>Numéro de vol</label><input id="vol-out" placeholder="Ex. AF1234"></div><div class="field"><label>Lien du vol (fourni par vous)</label><input id="vol-out-url" type="url" placeholder="https://…"></div><div class="field"><label>Notes aller</label><textarea id="vol-out-notes" placeholder="Terminal, bagages…"></textarea></div></div>
+        <div class="leg-card"><h4>Vol retour</h4><div class="field"><label>De</label><input id="vol-back-from" placeholder="Ville / aéroport"></div><div class="field"><label>À</label><input id="vol-back-to" placeholder="Ville / aéroport"></div><div class="field"><label>Date et heure</label><input id="vol-back-time" placeholder="15 juin · 18:10"></div><div class="field"><label>Numéro de vol</label><input id="vol-back" placeholder="Ex. AF1235"></div><div class="field"><label>Lien du vol (fourni par vous)</label><input id="vol-back-url" type="url" placeholder="https://…"></div><div class="field"><label>Notes retour</label><textarea id="vol-back-notes" placeholder="Terminal, bagages…"></textarea></div></div>
       </div>
-      <div class="grid2"><div class="field"><label>Date et heure aller</label><input id="vol-out-time" placeholder="12 juin · 09:30"></div><div class="field"><label>Date et heure retour</label><input id="vol-back-time" placeholder="15 juin · 18:10"></div></div>
-      <div class="field"><label>Trajet / aéroports</label><input id="vol-route" placeholder="Ex. Lyon → Bruxelles"></div>
       <div class="field"><label>Notes</label><textarea id="vol-notes" placeholder="Bagages, terminal, escale…"></textarea></div>
       <div class="actions"><button class="btn" onclick="saveSingle('flight')">Enregistrer</button></div>
     </div>
-    <div id="flight-list"></div>
   </section>
 
   <!-- HOTEL -->
   <section class="panel" id="hotel">
     <div class="heading"><h3>Notre hôtel</h3><span>Où dormir</span></div>
-    <div class="card">
-      <div class="cardhead"><div class="ico">⌂</div><div><b>Hébergement</b><small>Nom et adresse uniquement</small></div></div>
+    <div id="hotel-list"></div>
+    <button class="mini-btn" onclick="toggleForm('hotel-form')">＋ Ajouter / modifier l'hôtel</button>
+    <div class="card hidden" id="hotel-form">
+      <div class="cardhead"><div class="ico">⌂</div><div><b>Hébergement</b><small>Nom, adresse et horaires</small></div></div>
       <div class="field"><label>Nom de l'hôtel</label><input id="hotel-name" placeholder="Nom de l'établissement"></div>
       <div class="field"><label>Adresse</label><input id="hotel-address" placeholder="Adresse complète"></div>
+      <div class="grid2"><div class="field"><label>Heure d'arrivée / check-in</label><input id="hotel-checkin" type="time" value="15:00"></div><div class="field"><label>Heure de départ / check-out</label><input id="hotel-checkout" type="time"></div></div>
       <div class="actions"><button class="btn" onclick="saveSingle('hotel')">Enregistrer</button></div>
     </div>
-    <div id="hotel-list"></div>
   </section>
 
   <!-- TRANSFERT -->
   <section class="panel" id="transfert">
     <div class="heading"><h3>Nos transferts</h3><span>Comment se déplacer</span></div>
-    <div class="card">
+    <div id="transfer-list"></div>
+    <button class="mini-btn" onclick="toggleForm('transfer-form')">＋ Ajouter un transfert</button>
+    <div class="card hidden" id="transfer-form">
       <div class="cardhead"><div class="ico">⇢</div><div><b>Ajouter un trajet</b><small>Aéroport, gare, hôtel…</small></div></div>
       <div class="field">
         <label>Moyen de transport</label>
@@ -444,7 +474,6 @@ main {max-width:720px;margin:auto;padding:20px 15px 110px}
       </div>
       <div class="actions"><button class="btn" onclick="addItem('transfer')">＋ Ajouter</button></div>
     </div>
-    <div id="transfer-list"></div>
   </section>
 
   <!-- ACTIVITES -->
@@ -498,6 +527,7 @@ main {max-width:720px;margin:auto;padding:20px 15px 110px}
 </main>
 
 <nav class="bottom">
+  <button class="active" data-tab="infos"><span>▣</span>Infos</button>
   <button data-tab="jours"><span>☷</span>Jours</button>
   <button data-tab="membres"><span>◎</span>Membres</button>
   <button class="active" data-tab="vol"><span>✈</span>Vols</button>
@@ -676,40 +706,19 @@ async function loadTrips() {
    CREATION ET INVITATION
 ========================================== */
 
-$("create-trip").addEventListener("click", async () => {
-  const destination = getItem("destination");
-  const days = Number(getItem("days"));
-  const people = Number(getItem("people"));
-  const startDate = getItem("start-date") || null;
-  const endDate = getItem("end-date") || null;
-
-  if (!destination || days < 1 || people < 1) {
-    message("Vérifie la destination, les jours et le nombre de personnes.");
-    return;
-  }
-
-  if (startDate && endDate && endDate < startDate) {
-    message("La date de retour doit être après la date de départ.");
-    return;
-  }
-
-  message("Création du voyage…");
-
-  const {data,error} = await db.rpc("create_trip", {
-    p_destination:destination,
-    p_day_count:days,
-    p_person_count:people,
-    p_start_date:startDate,
-    p_end_date:endDate
-  });
-
-  if (error) {
-    message(error.message);
-    return;
-  }
-
+async function createTrip(destination,days,people,startDate,endDate,status){
+  if (!destination || days < 1 || people < 1) { status("Vérifie la destination, les jours et le nombre de personnes."); return; }
+  if (startDate && endDate && endDate < startDate) { status("La date de retour doit être après la date de départ."); return; }
+  status("Création du voyage…");
+  const {data,error} = await db.rpc("create_trip",{p_destination:destination,p_day_count:days,p_person_count:people,p_start_date:startDate||null,p_end_date:endDate||null});
+  if(error){status(error.message);return;}
+  $("new-trip-form").classList.add("hidden");
   await openTrip(data);
-});
+}
+
+$("create-trip").addEventListener("click",()=>createTrip(getItem("destination"),Number(getItem("days")),Number(getItem("people")),getItem("start-date"),getItem("end-date"),message));
+$("new-trip-toggle").addEventListener("click",()=>$("new-trip-form").classList.toggle("hidden"));
+$("new-trip-submit").addEventListener("click",()=>createTrip(getItem("new-destination"),Number(getItem("new-days")),Number(getItem("new-people")),getItem("new-start-date"),getItem("new-end-date"),text=>$("new-trip-message").textContent=text));
 
 $("join-trip").addEventListener("click", async () => {
   const code = getItem("invite").toUpperCase();
@@ -765,6 +774,11 @@ async function openTrip(id) {
   items = rows || [];
   members = memberRows || [];
   trips = tripRows || trips;
+  const savedFlight = items.find(item=>item.category==="flight");
+  if(savedFlight){
+    try{const f=JSON.parse(savedFlight.details||"{}");if(f.version===2){$("vol-company").value=savedFlight.title||"";$("vol-company-url").value=f.companyUrl||"";[["out",["vol-out-from","vol-out-to","vol-out-time","vol-out","vol-out-url","vol-out-notes"]],["back",["vol-back-from","vol-back-to","vol-back-time","vol-back","vol-back-url","vol-back-notes"]]].forEach(([dir,ids])=>{const x=f[dir]||{};[x.from,x.to,x.date,x.number,x.url,x.notes].forEach((v,i)=>$(ids[i]).value=v||"")});$("vol-notes").value=f.notes||""}}catch(_){}
+  }
+  const savedHotel=items.find(item=>item.category==="hotel");if(savedHotel){$("hotel-name").value=savedHotel.title||"";$("hotel-address").value=savedHotel.address||"";try{const h=JSON.parse(savedHotel.details||"{}");$("hotel-checkin").value=h.checkin||"15:00";$("hotel-checkout").value=h.checkout||""}catch(_){}}
 
   $("hero-title").textContent = trip.destination;
   $("hero-subtitle").textContent =
@@ -833,17 +847,21 @@ function renderSingle(category) {
   }
 
   let details = row.details || "";
+  let flightData = null;
 
   if (category === "flight") {
-    details = [
-      row.address,
-      row.duration,
-      row.details
-    ].filter(Boolean).join("\n");
+    try { flightData = JSON.parse(row.details || "{}"); } catch (_) { flightData = null; }
+    if (flightData && flightData.version === 2) {
+      container.innerHTML = `<div class="item saved-card"><h4>✈ ${escapeHTML(row.title)}</h4>${flightData.companyUrl?`<p><a target="_blank" rel="noopener" href="${safeUrl(flightData.companyUrl)}">Site de la compagnie ↗</a></p>`:""}<div class="leg-grid">${[flightData.out,flightData.back].map((leg,i)=>`<div class="leg-card"><h4>${i===0?"Vol aller":"Vol retour"}</h4><p class="route-big">${escapeHTML(leg.from||"Départ à préciser")} → ${escapeHTML(leg.to||"Arrivée à préciser")}</p>${leg.date?`<p>📅 ${escapeHTML(leg.date)}</p>`:""}${leg.number?`<p>Vol <strong>${escapeHTML(leg.number)}</strong>${leg.url?` · <a target="_blank" rel="noopener" href="${safeUrl(leg.url)}">Suivre ce vol ↗</a>`:""}</p>`:""}${leg.notes?`<p>${escapeHTML(leg.notes)}</p>`:""}</div>`).join("")}</div>${flightData.notes?`<p>${escapeHTML(flightData.notes)}</p>`:""}<button class="delete" onclick="deleteItem('${row.id}')">Supprimer les vols</button></div>`;
+      return;
+    }
+    details = [row.address, row.details].filter(Boolean).join("\n");
   }
 
   if (category === "hotel") {
-    details = row.address || "";
+    let hotelData={};try{hotelData=JSON.parse(row.details||"{}")}catch(_){}
+    container.innerHTML = `<div class="item saved-card"><h4>⌂ ${escapeHTML(row.title)}</h4>${row.address?`<p class="route-big">${escapeHTML(row.address)}</p><p><a target="_blank" rel="noopener" href="https://maps.apple.com/?q=${encodeURIComponent(row.address)}">Voir l'itinéraire vers l'hôtel ↗</a></p>`:""}${hotelData.checkin?`<p>Arrivée / check-in : <strong>${escapeHTML(hotelData.checkin)}</strong>${hotelData.checkin==="15:00"?" · à partir de 15 h":""}</p>`:""}${hotelData.checkout?`<p>Départ / check-out : <strong>${escapeHTML(hotelData.checkout)}</strong></p>`:""}<button class="delete" onclick="deleteItem('${row.id}')">Supprimer l'hôtel</button></div>`;
+    return;
   }
 
   if (category === "transfer") {
@@ -854,9 +872,8 @@ function renderSingle(category) {
     ].filter(Boolean).join("\n");
   }
 
-  const flightNumbers = category === "flight" ? [...(row.details.match(/(?:Aller|Retour) : ([^\\n]+)/g) || [])] : [];
   container.innerHTML = `
-    <div class="item ${category === "flight" ? "flight-card" : ""}">
+    <div class="item saved-card ${category === "flight" ? "flight-card" : ""}">
       <div class="itemtop">
         <b>${escapeHTML(row.title)}</b>
       </div>
@@ -887,7 +904,7 @@ function renderCollection(category) {
       : "";
 
     return `
-      <div class="item">
+      <div class="item ${category === "transfer" ? "saved-card" : ""}">
         <div class="itemtop">
           <div>
             <b>${escapeHTML(row.title)}</b>
@@ -897,6 +914,7 @@ function renderCollection(category) {
         </div>
         ${row.address ? `<p>${escapeHTML(row.address)}</p>` : ""}
         ${row.details ? `<p>${escapeHTML(row.details)}</p>` : ""}
+        ${category === "transfer" && row.details ? `<p><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(row.details)}">Voir le trajet sur la carte ↗</a></p>` : ""}
         ${row.address ? `<p><a target="_blank" rel="noopener" href="https://maps.apple.com/?q=${encodeURIComponent(row.address)}">Ouvrir dans Plans ↗</a></p>` : ""}
         <button class="delete" onclick="deleteItem('${row.id}')">Supprimer</button>
       </div>
@@ -907,14 +925,25 @@ function renderCollection(category) {
 function renderAll() {
   renderSingle("flight");
   renderSingle("hotel");
-  renderSingle("transfer");
+  renderCollection("transfer");
   renderCollection("activity");
   renderCollection("food");
   renderCollection("note");
+  renderImportantInfo();
   updateBudget();
   configureDayOptions();
   renderDaySummary();
 }
+
+function openInfoEditor(tabId,formId){switchTab(tabId);$(formId).classList.remove("hidden");setTimeout(()=>$(formId).scrollIntoView({behavior:"smooth",block:"start"}),30)}
+function renderImportantInfo(){
+  const container=$("important-info");if(!container)return;
+  const section=(title,html,tab,form)=>`<div class="dashboard-section"><h3>${title}</h3>${html}<button class="mini-btn" onclick="openInfoEditor('${tab}','${form}')">＋ ${getByCategory(tab==="vol"?"flight":tab==="hotel"?"hotel":"transfer").length?"Modifier / ajouter":"Ajouter"}</button></div>`;
+  container.innerHTML=section("✈ Vols",$("flight-list").innerHTML,"vol","flight-form")+section("⌂ Hôtel",$("hotel-list").innerHTML,"hotel","hotel-form")+section("⇢ Transferts",$("transfer-list").innerHTML,"transfert","transfer-form");
+}
+
+function safeUrl(value){try{const u=new URL(value);return ["http:","https:"].includes(u.protocol)?escapeHTML(u.href):"#"}catch(_){return "#"}}
+function toggleForm(id){const panel=$(id);panel.classList.toggle("hidden");if(!panel.classList.contains("hidden"))panel.scrollIntoView({behavior:"smooth",block:"start"})}
 
 function renderMembers(){
   $("member-list").innerHTML = members.map(m=>{const p=Array.isArray(m.profiles)?m.profiles[0]:m.profiles;const name=[p?.first_name,p?.last_name].filter(Boolean).join(" ") || "Membre";return `<span class="member-chip">${escapeHTML(name)}${m.user_id===user.id?" · vous":""}</span>`}).join("") || '<span class="muted">Aucun membre.</span>';
@@ -989,16 +1018,13 @@ async function saveSingle(type) {
   if (type === "flight") {
     const title = getItem("vol-company");
     if (!title) return alert("Renseigne la compagnie aérienne.");
-
+    const flightData={version:2,companyUrl:getItem("vol-company-url"),notes:getItem("vol-notes"),out:{from:getItem("vol-out-from"),to:getItem("vol-out-to"),date:getItem("vol-out-time"),number:getItem("vol-out"),url:getItem("vol-out-url"),notes:getItem("vol-out-notes")},back:{from:getItem("vol-back-from"),to:getItem("vol-back-to"),date:getItem("vol-back-time"),number:getItem("vol-back"),url:getItem("vol-back-url"),notes:getItem("vol-back-notes")}};
+    if(!flightData.out.number && !flightData.back.number && !flightData.out.from && !flightData.back.from) return alert("Renseigne au moins les informations d'un vol.");
     row = baseRow(
       "flight",
       title,
-      [
-        getItem("vol-out") ? "Aller : " + getItem("vol-out")+(getItem("vol-out-time")?" · "+getItem("vol-out-time"):"") : "",
-        getItem("vol-back") ? "Retour : " + getItem("vol-back")+(getItem("vol-back-time")?" · "+getItem("vol-back-time"):"") : "",
-        getItem("vol-notes")
-      ].filter(Boolean).join("\n"),
-      getItem("vol-route"),
+      JSON.stringify(flightData),
+      [flightData.out.from,flightData.out.to,flightData.back.from,flightData.back.to].filter(Boolean).join(" → "),
       0,
       "total",
       null
@@ -1012,7 +1038,7 @@ async function saveSingle(type) {
     row = baseRow(
       "hotel",
       title,
-      "",
+      JSON.stringify({checkin:getItem("hotel-checkin")||"15:00",checkout:getItem("hotel-checkout")}),
       getItem("hotel-address"),
       0,
       "total",
@@ -1044,6 +1070,8 @@ async function saveSingle(type) {
   }
 
   await refreshItems();
+  $(type+"-form")?.classList.add("hidden");
+  switchTab("infos");
 }
 
 /* Ajout des transferts, activités, repas et idées */
@@ -1121,6 +1149,7 @@ async function addItem(type) {
 
   clearForm(type);
   await refreshItems();
+  if(type==="transfer") {$("transfer-form").classList.add("hidden");switchTab("infos")}
 }
 
 function clearForm(type) {
@@ -1209,7 +1238,7 @@ function switchTab(id) {
   });
 
   requestAnimationFrame(() => {
-    window.scrollTo(0,position);
+    window.scrollTo(0,id === "infos" ? 0 : position);
   });
 }
 
@@ -1240,6 +1269,7 @@ $("logout").addEventListener("click",async () => {
 ========================================== */
 
 async function start() {
+  setAuthScreen();
   const {data,error} = await db.auth.getSession();
 
   if (error) {
@@ -1248,12 +1278,19 @@ async function start() {
     return;
   }
 
-  if (data.session) {
-    user = data.session.user;
-    await afterLogin();
-  } else {
+  if (!data.session) return;
+
+  const {data:verified,error:verifyError}=await db.auth.getUser();
+  if(verifyError || !verified.user){
+    user=null;
+    await db.auth.signOut();
     setAuthScreen();
+    message("Ta session précédente a expiré. Connecte-toi avec ton compte.");
+    return;
   }
+
+  user=verified.user;
+  await afterLogin();
 }
 
 db.auth.onAuthStateChange((event,session) => {
